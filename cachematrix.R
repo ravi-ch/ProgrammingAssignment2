@@ -1,15 +1,37 @@
-## Put comments here that give an overall description of what your
-## functions do
+##Author: Ravindra Chaudhary
+##Date: Sep 17, 2016
+##Project: Programming R - Week3 - Programming Assignment2
+##A combination of these two functions allow to take a matrix as an argument
+##and return an inverse of that matrix
+##it also cache the inverse of a matrix in the memory as long as the input matrix does not change
 
-## Write a short comment describing this function
-
-makeCacheMatrix <- function(x = matrix()) {
-
+##This function creates a special "matrix" object that can cache its inverse
+makeCacheMatrix <- function(x = matrix()) { #x is an input square matrix
+  m <- NULL                      #m is empty matrix
+  set <- function(y) {
+    x <<- y
+    m <<- NULL
+  }
+  get <- function() x
+  setInverse <- function(solve) m <<- solve
+  getInverse <- function() m
+  list(set = set, get = get,
+       setInverse = setInverse,
+       getInverse = getInverse)
 }
 
 
-## Write a short comment describing this function
-
-cacheSolve <- function(x, ...) {
-        ## Return a matrix that is the inverse of 'x'
+##This function computes the inverse of the special "matrix" returned by makeCacheMatrix above
+cacheSolve <- function(x, ...) { #x is an input square matrix
+  m <- x$getInverse()
+  if(!is.null(m)) {
+    message("retrieving from cache")
+    return(m)
+  }
+  data <- x$get()
+  m <- solve(data, ...)
+  x$setInverse(m)
+  m
 }
+
+##End of the code cachematrix.R
